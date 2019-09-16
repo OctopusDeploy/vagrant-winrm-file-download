@@ -1,5 +1,3 @@
-TODO!!
-
 # Vagrant WinRM File Downloader Plugin
 
 This is a super simple vagrant provisioner plugin that allows you to download files from the guest to the host.
