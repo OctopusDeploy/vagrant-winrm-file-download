@@ -48,6 +48,10 @@ cd <directory>
 bundle exec vagrant up
 ```
 
+### Building a new version
+1. update the version number in the `lib/vagrant-winrm-file-download.rb`
+1. run `gem build .\vagrant-winrm-file-download.gemspec`
+
 ## Contributing
 
 1. Create a github issue to discuss your idea
