@@ -1,0 +1,48 @@
+# -*- mode: ruby -*-
+
+# this is a sample file for using & testing the plugin
+
+VAGRANT_FILE_API_VERSION = "2"
+
+Vagrant.configure(VAGRANT_FILE_API_VERSION) do |config|
+
+  hostname = "vagrantdsc.local"
+  config.vm.guest = :windows
+  config.vm.communicator = :winrm
+
+  config.vm.allowed_synced_folder_types = [:winrm]
+  config.vm.synced_folder ".", "/vagrant", disabled: true
+
+  config.vm.provider "virtualbox" do |v, override|
+    v.gui = true
+    v.linked_clone = true
+    v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+    v.customize ["modifyvm", :id, "--audio", "none"]
+    v.customize ["modifyvm", :id, "--vram", "32"]
+    override.vm.box = "OctopusDeploy/dsc-test-server-windows-server-1803"
+    override.vm.box_url = "https://s3-ap-southeast-2.amazonaws.com/octopus-vagrant-boxes/vagrant/json/OctopusDeploy/virtualbox/dsc-test-server-windows-server-1803.json"
+    override.vm.network :forwarded_port, guest: 5985, host: 5985, id: "winrm", auto_correct: true
+  end
+
+  if Vagrant::Util::Platform.windows? then
+    config.vm.provider "hyperv" do |v, override|
+      override.vm.box = "OctopusDeploy/dsc-test-server-windows-server-1803"
+      override.vm.box_url = "https://s3-ap-southeast-2.amazonaws.com/octopus-vagrant-boxes/vagrant/json/OctopusDeploy/hyperv/dsc-test-server-windows-server-1803.json"
+      config.vm.network "public_network", bridge: "Default Switch"
+      v.memory = 2048
+      v.maxmemory = 2048
+      v.cpus = 2
+      override.vm.network :forwarded_port, guest: 5985, host: 5985, id: "winrm", auto_correct: true
+    end
+  end
+
+  # create a temp file
+  config.vm.provision "shell", inline: "get-date | set-content -path 'c:\\temp\\foo.txt'" 
+  
+  # download it
+  config.vm.provision "winrm-file-download" do |winrm|
+    winrm.source = 'c:\temp\foo.txt'
+    winrm.destination = 'c:\temp\foo-downloaded.txt'
+  end
+
+end
