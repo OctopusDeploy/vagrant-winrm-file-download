@@ -1,6 +1,6 @@
 require "bundler/gem_tasks"
 require 'rspec/core/rake_task'
-task :default => [:test, :quality]
+task :default => [:test]
 # Remove 'install' task as the gem is installed to Vagrant, not to system
 Rake::Task[:install].clear
 namespace :test do
