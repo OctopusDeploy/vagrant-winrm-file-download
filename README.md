@@ -31,7 +31,7 @@ Development was done against:
 * vagrant [master@9eac6ae62d6a](https://github.com/hashicorp/vagrant/commit/9eac6ae62d6ad7acdd173fabe558ba75156245b6), which is likely to be 2.2.6
 
 ```
-git clone git@github.com:OcotpusDeploy/vagrant-winrm-file-download.git
+git clone git@github.com:OctopusDeploy/vagrant-winrm-file-download.git
 cd vagrant-winrm-file-download
 bundle install
 ```
